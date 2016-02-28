@@ -1,0 +1,7 @@
+**********************
+THIRD PARTY COMPONENTS
+**********************
+
+=== http://www.apache.org/licenses/ - License====
+
+xmltask-1.14.jar  http://www.oopsconsultancy.com/software/xmltask/

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Created By: Abhinav Kumar Mishra
+ * Copyright &copy; 2016. Abhinav Kumar Mishra. 
+ * All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<config:config xmlns:config="http://example.com/config"
+	xmlns:cert="cert" xmlns:dev="dev" xmlns:local="local" xmlns:prod="prod"
+	xmlns:qa="qa">
+
+	<!-- DEPLOYMENT ENVIRONMENT [ REQUIRED! ] -->
+	<config:deploy>local</config:deploy>
+
+	<!-- LOCAL ENVIRONMENT CONFIGURATION -->
+	<local:env-config>
+		<local:mysql-jdbc-url>jdbc:mysql://localhost:3306</local:mysql-jdbc-url>
+	</local:env-config>
+
+	<!-- DEV ENVIRONMENT CONFIGURATION -->
+	<dev:env-config>
+		<dev:mysql-jdbc-url>jdbc:mysql://dev.mysql.com:3306</dev:mysql-jdbc-url>
+	</dev:env-config>
+
+	<!-- QA ENVIRONMENT CONFIGURATION -->
+	<qa:env-config>
+		<qa:mysql-jdbc-url>jdbc:mysql://qa.mysql.com:3306</qa:mysql-jdbc-url>
+	</qa:env-config>
+
+
+	<!-- CERT ENVIRONMENT CONFIGURATION -->
+	<cert:env-config>
+		<cert:mysql-jdbc-url>jdbc:mysql://cert.mysql.com:3306</cert:mysql-jdbc-url>
+	</cert:env-config>
+
+	<!-- PROD ENVIRONMENT CONFIGURATION -->
+	<prod:env-config>
+		<prod:mysql-jdbc-url>jdbc:mysql://mysql.com:3306</prod:mysql-jdbc-url>
+	</prod:env-config>
+
+</config:config>

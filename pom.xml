@@ -1,0 +1,135 @@
+<!--
+ * Created By: Abhinav Kumar Mishra
+ * Copyright &copy; 2016. Abhinav Kumar Mishra. 
+ * All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.abhinav.sample</groupId>
+	<artifactId>sample-maven-ant-integration</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>sample-maven-ant-integration</name>
+	<url>https://github.com/abhinavmishra14/sample-maven-ant-integration</url>
+	<description>This maven project is used to demonstrate executing ant tasks and calling external ant build.xml from maven.
+	    In this sample project we are trying to update an xml file element and calling an external build xml.
+	    You can also refer to following url: https://maven.apache.org/plugins/maven-antrun-plugin/examples/classpaths.html
+	</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Updating the environment name mapped inside a config.xml. Defult is 
+			local -->
+		<Env-Prefix>local</Env-Prefix>
+	</properties>
+	
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Abhinav Kumar Mishra</name>
+			<email>abhinavmishra14@gmail.com</email>
+			<organizationUrl>https://github.com/abhinavmishra14/sample-maven-ant-integration</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:abhinavmishra14/sample-maven-ant-integration.git</connection>
+		<developerConnection>scm:git:git@github.com:abhinavmishra14/sample-maven-ant-integration.git</developerConnection>
+		<url>git@github.com:abhinavmishra14/sample-maven-ant-integration.git</url>
+	</scm>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.oopsconsultancy</groupId>
+						<artifactId>xmltask</artifactId>
+						<version>1.14</version>
+						<!-- Using external dependency, if you don't want to use dependency 
+							and you want to use your remote/local repository. you can install/deploy 
+							the xmltask dependency to your remote/local repository using maven install/deploy 
+							command. 
+							
+							Command to install to local repository: mvn install:install-file 
+							-Dfile=C:\MyExternalLibs\xmltask-1.14.jar -DgroupId=com.oopsconsultancy -DartifactId=xmltask 
+							-Dversion=1.14 -Dpackaging=jar 
+							
+							Command to deploy to remote repository: mvn 
+							 deploy:deploy-file -Dfile=C:\MyExternalLibs\xmltask-1.14.jar -DgroupId=com.oopsconsultancy 
+							-DartifactId=xmltask -Dversion=1.14 -Dpackaging=jar -DrepositoryId=<id-to-map-on-server-section-of-settings.xml> 
+							-Durl=<url-of-the-repository-to-deploy> -->
+						<scope>system</scope>
+						<systemPath>${basedir}\src\lib\xmltask-1.14.jar</systemPath>
+
+					</dependency>
+					<dependency>
+						<groupId>xalan</groupId>
+						<artifactId>xalan</artifactId>
+						<version>2.7.2</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<target>
+						<!-- classpathref="maven.plugin.classpath" is optional when using external 
+							dependency. It is mandatory if you are having xmltask dependency in local/remote 
+							repository -->
+						<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask"
+							classpathref="maven.plugin.classpath" />
+						<echo>Setting environment to '${Env-Prefix}' ...</echo>
+						<!-- Updating the xml element, for more details: http://www.oopsconsultancy.com/software/xmltask/ -->
+						<xmltask source="${basedir}/src/main/config/config.xml"
+							dest="${basedir}/src/main/config/config.xml">
+							<replace path="//*[local-name() = 'deploy']/text()"
+								withText="${Env-Prefix}" />
+						</xmltask>
+
+                        <!-- Calling external ant build xml with multiple targets -->
+						<ant antfile="${basedir}/build-helper-external/build.xml">
+						    <target name="about" />
+							<target name="test" />
+						</ant>
+						
+						<!-- Calling external ant build xml with single targets -->
+						<ant antfile="${basedir}/build-helper-external/build.xml" target="about"/>
+					</target>
+				</configuration>
+				<goals>
+					<goal>run</goal>
+				</goals>
+			</plugin>
+		</plugins>
+	</build>
+</project>
